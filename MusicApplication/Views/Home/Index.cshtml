@@ -56,6 +56,7 @@
         //------------------ Function Calls -----------------------------------
         setDefaultVolume();
         window.setInterval(NextBackGround, 600000);
+        setBackGround();
         //--------------------------------------------------------------------
 
 
@@ -117,12 +118,16 @@
 
         //-------------------------------BackGround Functions------------------------------
 
+        function setBackGround() {
+            $("body").css("background-image", "url('"+allBackGrounds[currentBackGroundIndex]+"')");
+            
+        }
         // increment current background index and assign new background image
         function NextBackGround() {
             currentBackGroundIndex += 1;
             if (currentBackGroundIndex === maxBackGroundIndex)
                 currentBackGroundIndex = 0;
-            $("body").css("background-image", "url('"+allBackGrounds[currentBackGroundIndex]+"')");
+            setBackGround();
         }
 
         // decrement current background index and assign new background image
@@ -130,7 +135,7 @@
             currentBackGroundIndex -= 1;
             if (currentBackGroundIndex === -1)
                 currentBackGroundIndex = maxBackGroundIndex-1;
-            $("body").css("background-image", "url('"+allBackGrounds[currentBackGroundIndex]+"')");
+            setBackGround();
         }
 
         //--------------------------------------------------------------------
