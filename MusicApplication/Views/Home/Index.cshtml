@@ -1,0 +1,215 @@
+﻿@model MusicApplication.Models.MusicAppHomeModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   
+}
+
+
+
+<div style="text-align: center">
+    <iframe src="http://free.timeanddate.com/clock/i5vbxenj/n106/fn10/fs32/fcfff/tct/pct/ftb/th2" frameborder="0" width="216" height="38" allowTransparency="true"></iframe>
+
+    </div>
+
+
+<div class="col-lg-4 col-lg-offset-4" style="text-align: center;">
+    <div >
+        <h3 id="songName" style="color:white">@Model.MusicPaths[0].Replace(ViewBag.MusicFilePath,"")</h3>
+    </div>
+
+    <audio class="" onVolumeChange="SaveVolume();" controls="controls" id="player">
+        <source id="myfirstSrc" type="audio/mpeg" src="@Url.Action("myaudio","Home",new {fileName=Model.MusicPaths[0]})">
+    </audio>
+    
+    <br/>
+    <input type="button" class="btn btn-primary" id="Previous" value="Previous"/>
+    <input type="button" class="btn btn-danger" id="Pause" value="Pause"/>
+    <input type="button" class="btn btn-success" id="Play" value ="Play"/>
+    <input type="button"  class="btn btn-primary" id="Next" value="Next"/>
+    
+    
+   
+</div>
+<footer class="footer">
+    <button class="btn btn-success" id="PreviousBackground"><<</button>
+    <button class="btn btn-primary" id="NextBackground">>></button>
+</footer>
+
+
+@section scripts
+{
+    <script>
+        // --------------------------Variables-----------------------------------
+        var basePath = "/Home/MyAudio?fileName=";
+        var allMusic=@Html.Raw(Json.Encode(Model.MusicPaths));
+        var allBackGrounds=@Html.Raw(Json.Encode(Model.BackGroundPaths));
+        var currentIndex = 0;
+        var maxIndex=@Model.MusicPaths.Count;
+        var removeStr='@ViewBag.MusicFilePath';
+        var audioPlayer = $("#player")[0];
+        var cookieName = "audioPlayerVolume";
+        var currentBackGroundIndex = 0;
+        var maxBackGroundIndex = @Model.BackGroundPaths.Count;
+        //--------------------------------------------------------------------
+
+
+        //------------------ Function Calls -----------------------------------
+        setDefaultVolume();
+        window.setInterval(NextBackGround, 600000);
+        //--------------------------------------------------------------------
+
+
+        //----------------------------------Volume Funtions--------------------------
+
+        //Load volume from cookie and set it in audio player
+        function setDefaultVolume() {
+            var cookieValue = $.cookie(cookieName);
+            if (cookieValue !== undefined && cookieValue !== '') {
+                audioPlayer.volume = cookieValue;
+            }
+        }
+
+        // on audio player change volume store volume in cookie of page
+        function SaveVolume() {
+            $.cookie(cookieName, audioPlayer.volume);
+        }
+
+        //--------------------------------------------------------------------
+
+        //-----------------------------------Music Functions------------------------
+
+
+        // decrement current index for music files
+        function setPreviousCurrentIndex() {
+            currentIndex -= 1;
+            if (currentIndex === -1)
+                currentIndex = maxIndex-1;
+        }
+
+        // increment current index for music files
+        function setNextCurrentIndex() {
+            currentIndex += 1;
+            if (currentIndex === maxIndex)
+                currentIndex = 0;
+        }
+
+        // load new music file in audio player
+        function LoadTrack() {
+            var url = basePath + allMusic[currentIndex];
+            changeTrack(url);
+            var name = allMusic[currentIndex].replace(removeStr, "");
+            changeTitleSong(name);
+        }
+
+        // Play next song in audio player
+        function playNext() {
+            setNextCurrentIndex();
+            LoadTrack();
+        }
+
+        // Change title of music files
+        function changeTitleSong(newSong) {
+            $("#songName").text(newSong);
+        }
+
+        //--------------------------------------------------------------------
+
+
+        //-------------------------------BackGround Functions------------------------------
+
+        // increment current background index and assign new background image
+        function NextBackGround() {
+            currentBackGroundIndex += 1;
+            if (currentBackGroundIndex === maxBackGroundIndex)
+                currentBackGroundIndex = 0;
+            $("body").css("background-image", "url('"+allBackGrounds[currentBackGroundIndex]+"')");
+        }
+
+        // decrement current background index and assign new background image
+        function PreviousBackGround() {
+            currentBackGroundIndex -= 1;
+            if (currentBackGroundIndex === -1)
+                currentBackGroundIndex = maxBackGroundIndex-1;
+            $("body").css("background-image", "url('"+allBackGrounds[currentBackGroundIndex]+"')");
+        }
+
+        //--------------------------------------------------------------------
+
+
+      
+
+        //----------------------------Audio Player Functions---------------------------------
+
+        // change track in audio player
+        function changeTrack(sourceUrl) {
+          
+            $("#myfirstSrc").attr("src", sourceUrl);
+            /****************/
+            audioPlayer.pause();
+            audioPlayer.load(); //suspends and restores all audio element
+
+            //audio[0].play(); changed based on Sprachprofi's comment below
+            audioPlayer.oncanplaythrough = audioPlayer.play();
+            /****************/
+        }
+
+        // add listener to audio player
+        audioPlayer.addEventListener("ended", playNext);
+
+        
+
+      
+
+       
+
+        //--------------------------------------------------------------------
+
+
+        //-------------------------------Event Handlers----------------------------
+
+        //load next background
+        $("#NextBackground").click(function() {
+            NextBackGround();
+        });
+
+        // load previous background
+        $("#PreviousBackground").click(function() {
+            PreviousBackGround();
+        });
+
+        // load next song
+        $("#Next").on("click",
+            function () {
+                setNextCurrentIndex();
+                LoadTrack();
+            });
+
+        // load previous song
+        $("#Previous").on("click",
+            function () {
+                setPreviousCurrentIndex();
+                LoadTrack();
+            });
+
+        // pause audio player
+        $("#Pause").on("click",
+            function () {
+              
+                audioPlayer.pause();
+
+            });
+
+        // Play audio player
+        $("#Play").on("click",
+            function () {
+              
+                audioPlayer.play();
+
+            });
+        //--------------------------------------------------------------------
+
+
+      
+    </script>
+
+}
