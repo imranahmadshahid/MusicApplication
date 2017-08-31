@@ -123,9 +123,15 @@
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Media\0f9f032075f000da46931004c0a45cb7.jpg" />
+    <Content Include="Media\3840x2160.jpg" />
+    <Content Include="Media\8cc456f353489204d5033869f5fb9e5b.jpg" />
     <Content Include="Media\background.jpg" />
-    <Content Include="Media\HOT Balloon Trip_Ultra HD.jpg" />
-    <Content Include="Music\Junaid Jamshed Dil Dil [Songsx.Pk].mp3" />
+    <Content Include="Music\01 Ae Dil -  Jonita 190Kbps.mp3" />
+    <Content Include="Music\Bay_Khudi_OST__BuzzPk_Com_.mp3" />
+    <Content Include="Music\Channa Mereya.mp3" />
+    <Content Include="Music\Diyar E Dil Ost Hum Tv Drama [Songsx.Pk]%281%29.mp3" />
+    <Content Include="Music\Khuda_Aur_Muhabbat_OST_-_Khuda_Aur_Muhabbat_OST.mp3" />
     <Content Include="Music\Mann Mayal Ost By Qb [Songsx.Pk].mp3" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
