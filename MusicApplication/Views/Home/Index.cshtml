@@ -72,7 +72,12 @@
 
         // on audio player change volume store volume in cookie of page
         function SaveVolume() {
-            $.cookie(cookieName, audioPlayer.volume);
+            var expire = new Date();
+
+            //set expiry to current time plus 15 minutes in milliseconds
+            expire.setTime(expire.getTime() + (43800 * 60 * 1000)); 
+
+            $.cookie(cookieName, audioPlayer.volume,{expires: expire});
         }
 
         //--------------------------------------------------------------------
